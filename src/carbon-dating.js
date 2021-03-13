@@ -1,9 +1,15 @@
-const CustomError = require("../extensions/custom-error");
+const MODERN_ACTIVITY = 15;
+const HALF_LIFE_PERIOD = 5730;
 
-const MODERN_ACTIVITY= 15; 
-const HALF_LIFE_PERIOD= 5730;
+module.exports = function dateSample(sampleActivity) {
+  if (typeof sampleActivity !== 'string') return false;
+  const num = parseFloat(sampleActivity);
+  if (isNaN(num) || num <= 0 || num > MODERN_ACTIVITY) return false;
 
-module.exports = function dateSample(/* sampleActivity */) {
-  throw new CustomError('Not implemented');
-  // remove line with error and write your code here
+  return Math.ceil(
+    -(
+      HALF_LIFE_PERIOD *
+      (Math.log10(MODERN_ACTIVITY / num) / Math.log10(1 / 2))
+    )
+  );
 };
